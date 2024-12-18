@@ -1,0 +1,40 @@
+version: "3.3"
+
+volumes:
+  api-code:
+  db-data:
+  api-node-modules:
+
+services:
+  db:
+    platform: linux/x86_64
+    volumes:
+      - "db-data:/var/lib/mysql"
+  api:
+    environment:
+      - HOST=localhost
+      - NODE_ENV=development
+    volumes:
+      - api-code:/app/src
+      - api-node-modules:/app/src/node_modules
+
+# Set up Mutagen synchronization and forwarding.
+x-mutagen:
+  sync:
+    defaults:
+      stageMode: "neighboring"
+      ignore:
+        vcs: true
+    code:
+      alpha: "."
+      beta: "volume://api-code"
+      mode: "two-way-resolved"
+      ignore:
+        paths:
+          - "README"
+          - "Dockerfile"
+          - "docker-compose*.yml"
+      configurationBeta:
+        permissions:
+          defaultOwner: "id:9999" # app
+          defaultGroup: "id:9999" # app

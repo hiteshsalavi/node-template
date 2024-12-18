@@ -1,0 +1,7 @@
+FROM phusion/passenger-nodejs:3.1.0-arm64
+
+RUN apt-get update && \
+apt install -y netcat-traditional && \
+apt-get clean && \
+rm -rf /var/lib/apt/lists/*
+RUN apt-get update

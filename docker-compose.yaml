@@ -1,0 +1,36 @@
+# NodeJS - Template development orchestration.
+#
+# Simply run: make build && make up
+#
+# Implementation notes:
+# - By default we do NOT mount dev volumes here, they are mounted by docker-compose.override.yml.
+#   This allows CI tests to entirely run in the container without a mounted volumes, for simplicity
+#   and also to ensure there are fewer prod differences/problems masked by mounted dev volumes.
+#
+version: "3.3"
+services:
+  db:
+    image: mysql:5.7
+    platform: linux/amd64
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    restart: always
+    ports:
+      - "3310:3306"
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # Override npm flags so that development/test dependencies are installed.
+        - NPM_INSTALL_FLAGS=
+    image: gcr.io/hitesh/node-template/api:local
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      # In development, the AES key is 32 characters (256-bits) of "A", base64 encoded:
+      - AES_KEY=QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUE=
+      # In development, the AES salt is 12 characters of "B", base64 encoded:
+      - AES_SALT_FRAGMENT=QkJCQkJCQkJCQkJC

@@ -1,0 +1,14 @@
+#!/bin/bash
+
+YELLOW='\033[0;33m'
+NC='\033[0m'
+
+IMAGE="node-baseimage-arm64"
+TAG="latest"
+
+echo -e "Building ${YELLOW}$IMAGE:$TAG${NC} if not already built"
+
+if [ -z "$(docker images -q $IMAGE:$TAG 2> /dev/null)" ]; then
+  docker build -t $IMAGE:$TAG -f Dockerfile.base .
+  echo -e "Built! Go ahead, hit ${YELLOW}make up${NC}."
+fi

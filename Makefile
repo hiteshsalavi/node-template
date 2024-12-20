@@ -31,6 +31,14 @@ restart:
 	$(root_user) sv stop app
 	$(root_user) sv start app
 
+db:
+	mutagen-compose exec db mysql -u root
+
+run-query:
+	mutagen-compose exec -T db mysql -u root -e "CREATE DATABASE IF NOT EXISTS transaction_db"
+	mutagen-compose exec -T db mysql -u root transaction_db < dump.sql
+	mutagen-compose exec db mysql -u root transaction_db < query.sql | column -t
+
 # Wait for the database to be up, as visible from inside the container not the host.
 _wait-for-db:
 	@mutagen-compose run api bash -c "until nc -z db 3306; do echo 'Waiting for db instance to start...' && sleep 1; done"

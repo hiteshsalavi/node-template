@@ -1,5 +1,7 @@
 FROM phusion/passenger-nodejs:3.1.0-arm64
 
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys D870AB033FB45BD1
+
 RUN apt-get update && \
 apt install -y netcat-traditional && \
 apt-get clean && \

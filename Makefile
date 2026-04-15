@@ -8,7 +8,7 @@ up-detached:
 	$(MAKE) build-base
 	# mutagen-compose up -d db
 	# $(MAKE) _wait-for-db
-	mutagen-compose up -d api --build --force-recreate
+	mutagen-compose up -d api
 	# $(MAKE) _wait-for-api
 
 up:
@@ -33,6 +33,10 @@ exec-api: _require-api-up
 restart:
 	$(root_user) sv stop app
 	$(root_user) sv start app
+
+dev-restart:
+	$(app_user_run) npm run build
+	$(MAKE) restart
 
 db:
 	mutagen-compose exec db mysql -u root

@@ -1,2 +1,8 @@
 .git
 node_modules
+.gitignore
+.dockerignore
+dist
+Dockerfile*
+docker-compose*
+**/*.md

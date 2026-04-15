@@ -8,7 +8,7 @@ up-detached:
 	$(MAKE) build-base
 	# mutagen-compose up -d db
 	# $(MAKE) _wait-for-db
-	mutagen-compose up -d api
+	mutagen-compose up -d api --build --force-recreate
 	# $(MAKE) _wait-for-api
 
 up:
@@ -26,6 +26,9 @@ down:
 
 passenger-status: _require-api-up
 	$(app_user_run) passenger-status
+
+exec-api: _require-api-up
+	$(app_user_run) bash
 
 restart:
 	$(root_user) sv stop app

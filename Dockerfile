@@ -1,6 +1,13 @@
-FROM node-baseimage-arm64:latest
+# Stage 1: Build stage
+FROM node:latest AS builder
+WORKDIR /app/src
+ADD package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
 
-# Create app directory
+# Stage 2: Runtime stage
+FROM node-baseimage-arm64:latest
 WORKDIR /app/src
 
 # Install app dependencies
@@ -17,4 +24,4 @@ COPY --chown=app:app config/nginx-default-site.conf /etc/nginx/sites-enabled/def
 COPY --chown=app:app bin/run-api.sh /etc/service/app/run
 RUN chmod +x /etc/service/*/run
 
-COPY --chown=app:app . .
+COPY --chown=app:app --from=builder /app/src/dist /app/src/dist

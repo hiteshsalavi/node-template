@@ -4,6 +4,7 @@ volumes:
   api-code:
   db-data:
   api-node-modules:
+  api-dist:
 
 services:
   db:
@@ -17,6 +18,7 @@ services:
     volumes:
       - api-code:/app/src
       - api-node-modules:/app/src/node_modules
+      - api-dist:/app/src/dist
 
 # Set up Mutagen synchronization and forwarding.
 x-mutagen:
@@ -34,6 +36,22 @@ x-mutagen:
           - "README"
           - "Dockerfile"
           - "docker-compose*.yml"
+      configurationBeta:
+        permissions:
+          defaultOwner: "id:9999" # app
+          defaultGroup: "id:9999" # app
+    nodemodules:
+      alpha: "./node_modules"
+      beta: "volume://api-node-modules"
+      mode: "two-way-resolved"
+      configurationBeta:
+        permissions:
+          defaultOwner: "id:9999" # app
+          defaultGroup: "id:9999" # app
+    dist:
+      alpha: "./dist"
+      beta: "volume://api-dist"
+      mode: "two-way-resolved"
       configurationBeta:
         permissions:
           defaultOwner: "id:9999" # app

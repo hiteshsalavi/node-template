@@ -2,6 +2,8 @@
 
 Simple web app with phusion passenger and nginx and built on TypeScript
 
+It uses `nodejs/v22.22.0` and `npm/11.8.0`.
+
 ## Dependencies
 - Docker, Mutagen Compose
 
@@ -14,7 +16,9 @@ Simple web app with phusion passenger and nginx and built on TypeScript
 make up
 ```
 
-This command builds the base image if needed and starts the API container.
+This command builds the base image if needed and starts the API container in detached mode and starts logging.
+
+Once started some basic, `GET localhost:3000/api/healthcheck` and `GET localhost:3000/error-endpoint` endpoints are available.
 
 ## Stop the application
 

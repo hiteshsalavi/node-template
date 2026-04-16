@@ -1,4 +1,4 @@
-FROM phusion/passenger-nodejs:3.1.0-arm64
+FROM phusion/passenger-nodejs:3.1.6-arm64
 
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys D870AB033FB45BD1
 
